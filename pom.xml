@@ -35,7 +35,6 @@
         <ashot.version>1.5.4</ashot.version>
         <tyro-web.version>1.2.0-SNAPSHOT</tyro-web.version>
         <groovy.version>2.5.14</groovy.version>
-        <percy.version>1.0.0</percy.version>
         <codenarc.version>2.1.0</codenarc.version>
         <slf4j.version>1.7.32</slf4j.version>
 
@@ -168,6 +167,12 @@
 
     <dependencies>
         <dependency>
+            <groupId>sc.tyro</groupId>
+            <artifactId>tyro-web</artifactId>
+            <version>${tyro-web.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>ru.yandex.qatools.ashot</groupId>
             <artifactId>ashot</artifactId>
             <version>${ashot.version}</version>
@@ -182,24 +187,12 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <dependency>
-            <groupId>sc.tyro</groupId>
-            <artifactId>tyro-web</artifactId>
-            <version>${tyro-web.version}</version>
-            <scope>provided</scope>
-        </dependency>
 
         <!-- Tests -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <version>${junit.jupiter.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-junit-jupiter</artifactId>
-            <version>${mockito-junit.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
