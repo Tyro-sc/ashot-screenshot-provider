@@ -96,6 +96,7 @@ class TyroWebTestExtension implements BeforeAllCallback, AfterAllCallback {
             return options
         } else {
             Capabilities options = new ChromeOptions()
+            options.addArguments("--start-fullscreen")
             if (!isLocal) options.setHeadless(true)
             return options
         }
