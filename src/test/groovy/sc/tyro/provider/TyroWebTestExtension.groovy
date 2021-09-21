@@ -15,7 +15,7 @@
  */
 package sc.tyro.provider
 
-import io.github.bonigarcia.wdm.WebDriverManager
+
 import io.javalin.Javalin
 import org.junit.jupiter.api.extension.AfterAllCallback
 import org.junit.jupiter.api.extension.BeforeAllCallback
@@ -29,6 +29,8 @@ import org.openqa.selenium.firefox.FirefoxOptions
 import org.testcontainers.containers.BrowserWebDriverContainer
 import sc.tyro.web.WebBundle
 
+import static io.github.bonigarcia.wdm.WebDriverManager.chromedriver
+import static io.github.bonigarcia.wdm.WebDriverManager.firefoxdriver
 import static java.lang.Boolean.valueOf
 import static java.lang.System.getenv
 import static java.net.InetAddress.getByName
@@ -57,13 +59,12 @@ class TyroWebTestExtension implements BeforeAllCallback, AfterAllCallback {
         BASE_URL = "http://${host_ip}:${app.port()}/"
 
         Capabilities options = capabilities()
-
         if (isLocal) {
             if (getenv("browser") == "firefox") {
-                WebDriverManager.firefoxdriver().setup()
+                firefoxdriver().setup()
                 driver = new FirefoxDriver(options)
             } else {
-                WebDriverManager.chromedriver().setup()
+                chromedriver().setup()
                 driver = new ChromeDriver(options)
             }
         } else {
@@ -71,7 +72,6 @@ class TyroWebTestExtension implements BeforeAllCallback, AfterAllCallback {
                     .withCapabilities(options)
                     .withRecordingMode(RECORD_ALL, new File("./target/"))
             container.start()
-
             driver = container.webDriver
         }
 
