@@ -24,8 +24,11 @@
     <artifactId>ashot-screenshot-provider</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 
-    <name>Tyro::ASHot Screenshot provider</name>
+    <name>Tyro::AShot Screenshot provider</name>
     <inceptionYear>2021</inceptionYear>
+
+    <description>AShot screenshot provider</description>
+    <url>http://www.tyro.sc</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -63,6 +66,13 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
+
+    <scm>
+        <connection>scm:git:git@github.com:Tyro-sc/ashot-screenshot-provider.git</connection>
+        <developerConnection>scm:git:git@github.com:Tyro-sc/ashot-screenshot-provider.git</developerConnection>
+        <url>https://github.com/Tyro-sc/ashot-screenshot-provider</url>
+        <tag>HEAD</tag>
+    </scm>
 
     <developers>
         <developer>
