@@ -18,7 +18,3 @@ jobs:
           java-version: 11
       - name: Build and Tests with Chrome
         run: ./mvnw clean package
-      - name: Coverage
-        env:
-          CC_TEST_REPORTER_ID: ${{secrets.CC_TEST_REPORTER_ID}}
-        run: .github/actions/code-coverage.sh
