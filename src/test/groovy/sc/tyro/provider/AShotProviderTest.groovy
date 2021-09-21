@@ -25,7 +25,6 @@ import sc.tyro.core.component.Image
 
 import java.nio.file.Path
 
-
 import static org.hamcrest.MatcherAssert.assertThat
 import static org.hamcrest.Matchers.not
 import static org.hamcrest.io.FileMatchers.anExistingFile
