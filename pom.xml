@@ -41,11 +41,11 @@
         <slf4j.version>1.7.32</slf4j.version>
 
         <!-- Tests -->
-        <junit.jupiter.version>5.8.0</junit.jupiter.version>
+        <junit.jupiter.version>5.8.1</junit.jupiter.version>
         <mockito-junit.version>3.12.4</mockito-junit.version>
-        <javalin.version>3.13.11</javalin.version>
+        <javalin.version>4.1.1</javalin.version>
         <testcontainer.version>1.16.0</testcontainer.version>
-        <webdrivermanager.version>4.3.1</webdrivermanager.version>
+        <webdrivermanager.version>5.0.2</webdrivermanager.version>
 
         <!-- Plugins -->
         <gmavenplus-plugin.version>1.8.1</gmavenplus-plugin.version>
