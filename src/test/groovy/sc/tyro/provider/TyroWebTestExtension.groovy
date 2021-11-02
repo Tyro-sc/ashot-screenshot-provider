@@ -16,6 +16,7 @@
 package sc.tyro.provider
 
 import io.javalin.Javalin
+import io.javalin.http.staticfiles.Location
 import org.junit.jupiter.api.extension.AfterAllCallback
 import org.junit.jupiter.api.extension.BeforeAllCallback
 import org.junit.jupiter.api.extension.ExtensionContext
@@ -30,6 +31,7 @@ import sc.tyro.web.WebBundle
 
 import static io.github.bonigarcia.wdm.WebDriverManager.chromedriver
 import static io.github.bonigarcia.wdm.WebDriverManager.firefoxdriver
+import static io.javalin.http.staticfiles.Location.CLASSPATH
 import static java.lang.Boolean.valueOf
 import static java.lang.System.getenv
 import static java.net.InetAddress.getByName
@@ -49,7 +51,7 @@ class TyroWebTestExtension implements BeforeAllCallback, AfterAllCallback {
     @Override
     void beforeAll(ExtensionContext extensionContext) throws Exception {
         app = Javalin.create({
-            config -> config.addStaticFiles("/webapp")
+            config -> config.addStaticFiles("/webapp", CLASSPATH)
         }).start(0)
 
         DatagramSocket socket = new DatagramSocket()

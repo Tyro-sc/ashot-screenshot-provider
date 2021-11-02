@@ -20,8 +20,7 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import sc.tyro.bundle.html5.Img
-import sc.tyro.core.component.Image
+import sc.tyro.core.component.Button
 
 import java.nio.file.Path
 
@@ -63,12 +62,12 @@ class AShotProviderTest {
     @DisplayName("Should take component screenshot")
     @Order(2)
     void componentScreenshot() {
-        Image image = $('img:first') as Img
+        Button button = $('button') as sc.tyro.bundle.html5.Button
         File screenshot = new File("target/screenshots/component.png")
 
         assertThat(screenshot, not(anExistingFile()))
 
-        takeScreenshot('component', image)
+        takeScreenshot('component', button)
 
         assertThat(screenshot, anExistingFile())
     }

@@ -15,13 +15,11 @@
  */
 package sc.tyro.provider
 
-import org.openqa.selenium.By
+import org.openqa.selenium.JavascriptExecutor
 import org.openqa.selenium.WebDriver
 import ru.yandex.qatools.ashot.AShot
 import ru.yandex.qatools.ashot.Screenshot
 import ru.yandex.qatools.ashot.coordinates.WebDriverCoordsProvider
-import ru.yandex.qatools.ashot.cropper.indent.IndentCropper
-import ru.yandex.qatools.ashot.shooting.ShootingStrategies
 import sc.tyro.core.component.Component
 import sc.tyro.core.provider.ScreenshotProvider
 
@@ -29,7 +27,9 @@ import java.nio.file.Path
 
 import static java.nio.file.Files.createDirectories
 import static javax.imageio.ImageIO.write
-import static ru.yandex.qatools.ashot.cropper.indent.IndentFilerFactory.blur
+import static org.openqa.selenium.By.id
+import static ru.yandex.qatools.ashot.shooting.ShootingStrategies.scaling
+import static ru.yandex.qatools.ashot.shooting.ShootingStrategies.viewportPasting
 
 class AShotProvider implements ScreenshotProvider {
     private final WebDriver webDriver
@@ -44,14 +44,14 @@ class AShotProvider implements ScreenshotProvider {
 
         if (component) {
             screenshot = new AShot()
-                    .imageCropper(new IndentCropper()
-                            .addIndentFilter(blur()))
                     .coordsProvider(new WebDriverCoordsProvider())
-                    .takeScreenshot(webDriver, webDriver.findElement(By.id(component.id())))
+                    .takeScreenshot(webDriver, webDriver.findElement(id(component.id())))
         } else {
+            JavascriptExecutor js = (JavascriptExecutor) webDriver
+            Integer dpr = (Integer) js.executeScript('return window.devicePixelRatio')
             screenshot = new AShot()
-                    .shootingStrategy(ShootingStrategies.viewportPasting(100))
-                    .takeScreenshot(webDriver)
+                    .shootingStrategy(viewportPasting(scaling(dpr), 100))
+                    .takeScreenshot webDriver
         }
 
         Path target = Path.of(System.getProperty("user.dir"), 'target', 'screenshots', name + '.png')
