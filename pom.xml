@@ -27,7 +27,7 @@
     <inceptionYear>2021</inceptionYear>
 
     <description>AShot screenshot provider</description>
-    <url>http://www.tyro.sc</url>
+    <url>https://www.tyro.sc</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -35,17 +35,17 @@
         <maven.compiler.target>${maven.compiler.source}</maven.compiler.target>
 
         <ashot.version>1.5.4</ashot.version>
-        <tyro-web.version>1.2.0</tyro-web.version>
+        <tyro-web.version>1.3.0</tyro-web.version>
         <groovy.version>2.5.14</groovy.version>
         <codenarc.version>2.1.0</codenarc.version>
-        <slf4j.version>1.7.32</slf4j.version>
+        <slf4j.version>1.7.36</slf4j.version>
 
         <!-- Tests -->
-        <junit.jupiter.version>5.8.1</junit.jupiter.version>
+        <junit.jupiter.version>5.8.2</junit.jupiter.version>
         <mockito-junit.version>3.12.4</mockito-junit.version>
-        <javalin.version>4.1.1</javalin.version>
-        <testcontainer.version>1.16.0</testcontainer.version>
-        <webdrivermanager.version>5.0.2</webdrivermanager.version>
+        <javalin.version>4.3.0</javalin.version>
+        <testcontainer.version>1.16.3</testcontainer.version>
+        <webdrivermanager.version>5.1.0</webdrivermanager.version>
 
         <!-- Plugins -->
         <gmavenplus-plugin.version>1.8.1</gmavenplus-plugin.version>
@@ -61,7 +61,7 @@
     <licenses>
         <license>
             <name>Apache License 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.html</url>
             <distribution>repo</distribution>
         </license>
     </licenses>
