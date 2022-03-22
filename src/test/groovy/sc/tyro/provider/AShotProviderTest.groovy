@@ -29,10 +29,10 @@ import static org.hamcrest.Matchers.not
 import static org.hamcrest.io.FileMatchers.anExistingFile
 import static sc.tyro.core.Config.setScreenshotProvider
 import static sc.tyro.core.Tyro.*
-import static sc.tyro.provider.TyroWebTestExtension.BASE_URL
-import static sc.tyro.provider.TyroWebTestExtension.driver
+import static WebdriverExtension.BASE_URL
+import static WebdriverExtension.driver
 
-@ExtendWith(TyroWebTestExtension)
+@ExtendWith(WebdriverExtension)
 @DisplayName("Screenshot Tests")
 class AShotProviderTest {
     @BeforeAll

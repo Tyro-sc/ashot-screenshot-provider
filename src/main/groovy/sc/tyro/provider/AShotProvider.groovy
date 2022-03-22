@@ -33,9 +33,11 @@ import static ru.yandex.qatools.ashot.shooting.ShootingStrategies.viewportPastin
 
 class AShotProvider implements ScreenshotProvider {
     private final WebDriver webDriver
+    private final String directory
 
-    AShotProvider(WebDriver webDriver) {
+    AShotProvider(WebDriver webDriver, String directory = 'screenshots') {
         this.webDriver = webDriver
+        this.directory = directory
     }
 
     @Override
@@ -54,7 +56,7 @@ class AShotProvider implements ScreenshotProvider {
                     .takeScreenshot webDriver
         }
 
-        Path target = Path.of(System.getProperty("user.dir"), 'target', 'screenshots', name + '.png')
+        Path target = Path.of(System.getProperty("user.dir"), 'target', directory, name + '.png')
         createDirectories(target.getParent())
 
         write(screenshot.getImage(), "PNG", target.toFile())

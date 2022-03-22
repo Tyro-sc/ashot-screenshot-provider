@@ -15,18 +15,16 @@
  */
 package sc.tyro.provider
 
+import io.github.bonigarcia.wdm.WebDriverManager
 import io.javalin.Javalin
-import io.javalin.http.staticfiles.Location
 import org.junit.jupiter.api.extension.AfterAllCallback
 import org.junit.jupiter.api.extension.BeforeAllCallback
 import org.junit.jupiter.api.extension.ExtensionContext
-import org.openqa.selenium.Capabilities
 import org.openqa.selenium.WebDriver
-import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.chrome.ChromeOptions
-import org.openqa.selenium.firefox.FirefoxDriver
 import org.openqa.selenium.firefox.FirefoxOptions
-import org.testcontainers.containers.BrowserWebDriverContainer
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import sc.tyro.web.WebBundle
 
 import static io.github.bonigarcia.wdm.WebDriverManager.chromedriver
@@ -35,18 +33,23 @@ import static io.javalin.http.staticfiles.Location.CLASSPATH
 import static java.lang.Boolean.valueOf
 import static java.lang.System.getenv
 import static java.net.InetAddress.getByName
-import static org.testcontainers.containers.BrowserWebDriverContainer.VncRecordingMode.RECORD_ALL
+import static org.openqa.selenium.remote.Browser.CHROME
+import static org.openqa.selenium.remote.Browser.FIREFOX
 
 /**
  * @author David Avenante
  * @since 1.0.0
  */
-class TyroWebTestExtension implements BeforeAllCallback, AfterAllCallback {
+class WebdriverExtension implements BeforeAllCallback, AfterAllCallback {
+    private static Logger LOGGER = LoggerFactory.getLogger(WebdriverExtension.class)
+
     private static Javalin app
     public static WebDriver driver
-    private static BrowserWebDriverContainer container
     public static String BASE_URL
-    private boolean isLocal = valueOf(getenv("local"))
+
+    private static WebDriverManager wdm
+    private static String browser
+    private static boolean isCI = valueOf(getenv('CI'))
 
     @Override
     void beforeAll(ExtensionContext extensionContext) throws Exception {
@@ -59,47 +62,37 @@ class TyroWebTestExtension implements BeforeAllCallback, AfterAllCallback {
         String host_ip = socket.localAddress.hostAddress
         BASE_URL = "http://${host_ip}:${app.port()}/"
 
-        Capabilities options = capabilities()
-        if (isLocal) {
-            if (getenv("browser") == "firefox") {
-                firefoxdriver().setup()
-                driver = new FirefoxDriver(options)
-            } else {
-                chromedriver().setup()
-                driver = new ChromeDriver(options)
-            }
-        } else {
-            container = new BrowserWebDriverContainer()
-                    .withCapabilities(options)
-                    .withRecordingMode(RECORD_ALL, new File("./target/"))
-            container.start()
-            driver = container.webDriver
+        browser = getenv('browser')
+        if (!browser) {
+            LOGGER.info('No browser selected. Use Chrome')
+            browser = 'chrome'
         }
 
+        if (FIREFOX.is(browser)) {
+            wdm = firefoxdriver()
+            FirefoxOptions options = new FirefoxOptions()
+            options.addArguments('--width=1200')
+            options.addArguments('--height=1500')
+            wdm.capabilities(options)
+        } else if (CHROME.is(browser)) {
+            wdm = chromedriver()
+            ChromeOptions options = new ChromeOptions()
+            options.addArguments('--window-size=1200,1500')
+            wdm.capabilities(options)
+        }
+
+        if (isCI) {
+            wdm.browserInDocker().enableRecording()
+        }
+
+        driver = wdm.create()
         WebBundle.init(driver)
     }
 
     @Override
     void afterAll(ExtensionContext extensionContext) throws Exception {
         driver.close()
+        wdm.quit()
         app.stop()
-        if (!isLocal) {
-            container.stop()
-        }
-    }
-
-    private capabilities() {
-        if (getenv("browser") == "firefox") {
-            Capabilities options = new FirefoxOptions()
-            if (!isLocal) options.setHeadless(true)
-            options.addArguments("--start-fullscreen")
-            options.addArguments("--start-maximized")
-            return options
-        } else {
-            Capabilities options = new ChromeOptions()
-            options.addArguments("--start-fullscreen")
-            if (!isLocal) options.setHeadless(true)
-            return options
-        }
     }
 }
