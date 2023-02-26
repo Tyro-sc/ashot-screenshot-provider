@@ -30,7 +30,7 @@ import static org.hamcrest.io.FileMatchers.anExistingFile
 import static sc.tyro.core.Config.setScreenshotProvider
 import static sc.tyro.core.Tyro.*
 import static WebdriverExtension.BASE_URL
-import static WebdriverExtension.driver
+import static sc.tyro.provider.WebdriverExtension.webDriver
 
 @ExtendWith(WebdriverExtension)
 @DisplayName("Screenshot Tests")
@@ -40,7 +40,7 @@ class AShotProviderTest {
         File screenshotDir = Path.of(System.getProperty("user.dir"), 'target', 'screenshots').toFile()
         screenshotDir.deleteDir()
 
-        screenshotProvider = new AShotProvider(driver)
+        screenshotProvider = new AShotProvider(webDriver)
 
         visit BASE_URL + 'index.html'
     }
