@@ -33,8 +33,6 @@ import static io.javalin.http.staticfiles.Location.CLASSPATH
 import static java.lang.Boolean.valueOf
 import static java.lang.System.getenv
 import static java.net.InetAddress.getByName
-import static org.openqa.selenium.remote.Browser.CHROME
-import static org.openqa.selenium.remote.Browser.FIREFOX
 
 /**
  * @author David Avenante
@@ -43,55 +41,57 @@ import static org.openqa.selenium.remote.Browser.FIREFOX
 class WebdriverExtension implements BeforeAllCallback, AfterAllCallback {
     private static Logger LOGGER = LoggerFactory.getLogger(WebdriverExtension.class)
 
-    private static Javalin app
-    public static WebDriver driver
     public static String BASE_URL
-
+    public static WebDriver webDriver
     private static WebDriverManager wdm
-    private static String browser
+
+    private static Javalin app
     private static boolean isCI = valueOf(getenv('CI'))
+    private String browser = getenv('browser')?.toLowerCase()
 
     @Override
     void beforeAll(ExtensionContext extensionContext) throws Exception {
-        app = Javalin.create({
-            config -> config.addStaticFiles("/webapp", CLASSPATH)
-        }).start(0)
+        app = Javalin.create({it -> it.staticFiles.add("/webapp", CLASSPATH)}).start(0)
 
         DatagramSocket socket = new DatagramSocket()
         socket.connect(getByName("8.8.8.8"), 10002)
         String host_ip = socket.localAddress.hostAddress
         BASE_URL = "http://${host_ip}:${app.port()}/"
 
-        browser = getenv('browser')
         if (!browser) {
-            LOGGER.info('No browser selected. Use Chrome')
-            browser = 'chrome'
+            LOGGER.info('No Browser selected. Use Chrome')
+            browser = "chrome"
         }
 
-        if (FIREFOX.is(browser)) {
-            wdm = firefoxdriver()
-            FirefoxOptions options = new FirefoxOptions()
-            options.addArguments('--width=1200')
-            options.addArguments('--height=1500')
-            wdm.capabilities(options)
-        } else if (CHROME.is(browser)) {
-            wdm = chromedriver()
-            ChromeOptions options = new ChromeOptions()
-            options.addArguments('--window-size=1200,1500')
-            wdm.capabilities(options)
+        switch (browser) {
+            case "firefox":
+                wdm = firefoxdriver()
+                FirefoxOptions options = new FirefoxOptions()
+                options.addArguments("--start-fullscreen")
+                options.addArguments("--start-maximized")
+                wdm.capabilities(options)
+                break
+            case "chrome":
+                wdm = chromedriver()
+                ChromeOptions options = new ChromeOptions()
+                options.addArguments("--start-fullscreen")
+                wdm.capabilities(options)
+                break
+            default:
+                throw new IllegalStateException("Fail to set browser: " + browser)
         }
 
         if (isCI) {
-            wdm.browserInDocker().enableRecording()
+            wdm.browserInDocker()
         }
 
-        driver = wdm.create()
-        WebBundle.init(driver)
+        webDriver = wdm.create()
+        WebBundle.init(webDriver)
     }
 
     @Override
     void afterAll(ExtensionContext extensionContext) throws Exception {
-        driver.close()
+        webDriver.close()
         wdm.quit()
         app.stop()
     }
