@@ -37,7 +37,7 @@
         <ashot.version>1.5.4</ashot.version>
         <tyro-web.version>1.4.0</tyro-web.version>
         <groovy.version>3.0.15</groovy.version>
-        <slf4j.version>1.7.36</slf4j.version>
+        <slf4j.version>2.0.6</slf4j.version>
 
         <!-- Tests -->
         <junit.jupiter.version>5.8.2</junit.jupiter.version>
